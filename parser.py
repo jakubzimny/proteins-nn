@@ -36,7 +36,8 @@ class InputParser:
                 row.append((float(data_list[6]) + float(data_list[9])) / 2) # average Ha y
                 row.append((float(data_list[7]) + float(data_list[10])) / 2) # average Ha z
         elif self._input_type == 'B':
-            for i in range(2, 9): # theta, Ca x, Ca y, Ca z, Qb x, Qb y, Qb z   
+            row.append(self._tokenizer.get_token(data_list[1]))
+            for i in range(2, 9): # theta, Ca x, Ca y, Ca z, Qb x, Qb y, Qb z  
                 row.append(float(data_list[i])) 
         elif self._input_type == 'N':
             for i in range(3, 14): # theta1, theta2, Ca x, Ca y, Ca z, Ca2 x, Ca2 y, Ca2 z, Hn x, Hn y, Hn z      
