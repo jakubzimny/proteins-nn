@@ -48,12 +48,14 @@ if __name__ == "__main__":
     activation_function = 'linear'
     token_increment = 1.0
     batch_size = 128
-    epochs = 150
-    train_test_ratio = 0.85
-    use_lm = True
+    epochs = 250
+    train_test_ratio = 0.9
+    use_lm = False
 
-    parser = InputParser(f'data_extended/H{input_type}_All.inp',
-                         input_type=input_type, token_increment=token_increment)
+    parser = InputParser(f'data_nmr/H{input_type}_nmr.inp',
+                         input_type='B', token_increment=token_increment)
+    # parser = InputParser(f'data_extended/H{input_type}_All.inp',
+    #                      input_type=input_type, token_increment=token_increment)
     data = parser.parse_input()
     norm = DataNormalizer(data)
     norm_data = norm.get_normalized_dateset()
@@ -82,12 +84,24 @@ if __name__ == "__main__":
               callbacks=[tensorboard_callback])
 
     score = model.evaluate(X_test, Y_test, verbose=0)
-    print(f'###########\nTest set: \nMSE: {score[0]}\nMAE: {score[1]}\nRMSE: {score[2]}') 
+    print(f'###########\nTest set: \nMSE: {score[0]}\nMAE: {score[1]}\nRMSE: {score[2]}\n') 
     print('###########\nSample predictions (first 10 elements of test set):')
+
+    # with open(f'results/{input_type}_LM_{activation_function}_extended_data_no_norm.txt', 'w+') as f:
+    #     f.write(f'MSE: {score[0]} MAE: {score[1]} RMSE: {score[2]}\n')
+    #     for i in range(0, len(X_test)):
+    #         predicted_y = model.predict(np.reshape(X_test[i],(1,-1)))
+    #         _, out_test_y = norm.inverse_scale_row(list(X_test[i]), list(Y_test[i]))
+    #         _, out_pred_y = norm.inverse_scale_row(list(X_test[i]), predicted_y.tolist()[0])
+    #         #f.write(f'{Y_test[i]}{predicted_y[0]}\n')
+    #         f.write(f'{out_test_y}{out_pred_y}\n')
+
     for i in range (0, 10):
         predicted_y = model.predict(np.reshape(X_test[i],(1,-1)))
-        _, out_test_y = norm.inverse_scale_row(list(X_test[i]), list(Y_test[i]))
-        _, out_pred_y = norm.inverse_scale_row(list(X_test[i]), predicted_y.tolist()[0])
-        print(f'True value: {out_test_y}, predicted value {out_pred_y}')
+        print(f'True value: {Y_test[i]}, predicted value {predicted_y}') 
+
+        #_, out_test_y = norm.inverse_scale_row(list(X_test[i]), list(Y_test[i]))
+        #_, out_pred_y = norm.inverse_scale_row(list(X_test[i]), predicted_y.tolist()[0])
+        #print(f'True value: {out_test_y}, predicted value {out_pred_y}')
 
     

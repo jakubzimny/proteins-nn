@@ -35,24 +35,30 @@ class InputParser:
             if len(data_list) == 17: # single hydrogen
                 # data_list expected: amino_token, theta, Ca x, Ca y, Ca z, Ha x, Ha y, Ha z, Vx[xyz], Vy[xyz], Vz[xyz]   
                 row.append(float(data_list[0]))
-                row.append(float(data_list[1]) * 180.0 / 3.14159)
+                #row.append(float(data_list[1]) * 180.0 / 3.14159)
+                row.append(float(data_list[1]))
                 for i in range(2, 5):
-                    row.append(float(data_list[i]) + float(data_list[i+6]) + float(data_list[i+9]) + float(data_list[i+12]))
+                    #row.append(float(data_list[i]) + float(data_list[i+6]) + float(data_list[i+9]) + float(data_list[i+12]))
+                    row.append(float(data_list[i]))
                 for i in range(5, 8):
                     row.append(float(data_list[i]))
             else: # double hydrogen
                 row.append(float(data_list[0]))
-                row.append(float(data_list[1]) * 180.0 / 3.14159)
+                #row.append(float(data_list[1]) * 180.0 / 3.14159)
+                row.append(float(data_list[1]))
                 for i in range(2, 5):
-                    row.append(float(data_list[i]) + float(data_list[i+9]) + float(data_list[i+12]) + float(data_list[i+15]))
+                    #row.append(float(data_list[i]) + float(data_list[i+9]) + float(data_list[i+12]) + float(data_list[i+15]))
+                    row.append(float(data_list[i]))
                 for i in range(5, 8):
                     row.append((float(data_list[i]) + float(data_list[i+3])) / 2) # average Ha
         elif self._input_type == 'B':
             row.append(self._tokenizer.get_token(data_list[1]))
-            row.append(float(data_list[2]) * 180.0 / 3.14159) # theta
+            #row.append(float(data_list[2]) * 180.0 / 3.14159) # theta
+            row.append(float(data_list[2]))
             for i in range(3, 6):
                 # Ca x, Ca y, Ca z
-                row.append(float(data_list[i]) + float(data_list[i+6]) + float(data_list[i+9]) + float(data_list[i+12]))
+                #row.append(float(data_list[i]) + float(data_list[i+6]) + float(data_list[i+9]) + float(data_list[i+12]))
+                row.append(float(data_list[i]))
             for i in range(6, 9): # Qb x, Qb y, Qb z  
                 row.append(float(data_list[i])) 
         elif self._input_type == 'N':
@@ -86,7 +92,7 @@ class InputParser:
             last_file_count = self._record_counter
             for line in input_file:
                 if counter != 0: # skip first line with number of pdbdata files
-                    if 'pdbdata' in line: # ignoring file headers               
+                    if '.pdb' in line: # ignoring file headers             
                         ignore_next = 3
                         if counter != 1:
                             self._file_counters.append(self._record_counter - last_file_count)
